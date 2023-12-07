@@ -11,9 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.myapplication.Lib.LibSocket;
 import com.example.myapplication.Lib.MyApplication;
-
 import java.net.Socket;
-import java.io.IOException;
+
 
 public class MagasinActivity extends AppCompatActivity {
 
@@ -68,6 +67,8 @@ public class MagasinActivity extends AppCompatActivity {
 
     public void effectuerAchat(View v){
         Intent i = new Intent(this, PanierActivity.class);
+        MyApplication myApp = (MyApplication) getApplication();
+        myApp.setSocket(sSocket);
         startActivity(i);
     }
 
@@ -88,7 +89,11 @@ public class MagasinActivity extends AppCompatActivity {
                 textViewArticle.setText(mots[2]);
                 textViewPrix.setText(mots[3]);
                 textViewStock.setText(mots[4]);
-                // Mettez à jour l'image si nécessaire (mots[5])
+                String nomImage = mots[5].substring(0, mots[5].lastIndexOf('.')).toLowerCase();
+                int resID = getResources().getIdentifier(nomImage, "drawable", getPackageName());
+                ImageView imageViewArticle = findViewById(R.id.imageViewArticle);
+                imageViewArticle.setImageResource(resID);
+
             } else {
                 // Gérer l'erreur de consultation
             }

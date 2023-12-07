@@ -74,9 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         Switch switchNewClient = findViewById(R.id.switchNewClient);
 
         if (switchNewClient.isChecked()) {
-            return 1; // Switch activé
+            return 1;
         } else {
-            return 0; // Switch désactivé
+            return 0;
         }
     }
 }
