@@ -7,13 +7,13 @@
     tools:context=".MagasinActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageViewArticle"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/ferme_des_brindelles_1_e1626177921938" />
 
     <TextView
@@ -44,32 +44,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewArticle"
         android:layout_width="150dp"
         android:layout_height="45dp"
-        android:text="Null"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="number"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <EditText
-        android:id="@+id/editTextNumber2"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
     <TextView
         android:id="@+id/textView6"
@@ -77,38 +57,32 @@
         android:layout_height="45dp"
         android:text="Quantité souhaitée : "
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <EditText
-        android:id="@+id/editTextNumberDecimal"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber2" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="134dp"
-        android:layout_height="55dp"
-        android:text="Précédent"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAcheter"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonPrecedent"
         android:layout_width="134dp"
         android:layout_height="55dp"
-        android:text="Suivant"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:onClick="consulterPrecedent"
+        android:text="Précédent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewArticle" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonSuivant"
+        android:layout_width="134dp"
+        android:layout_height="55dp"
+        android:onClick="consulterSuivant"
+        android:text="Suivant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewArticle" />
+
+    <Button
+        android:id="@+id/buttonAcheter"
         android:layout_width="301dp"
         android:layout_height="51dp"
+        android:onClick="acheter"
         android:text="Acheter"
         app:layout_constraintBottom_toTopOf="@+id/buttonPanier"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,5 +97,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewPrix"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewArticle" />
+
+    <TextView
+        android:id="@+id/textViewStock"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPrix" />
+
+    <EditText
+        android:id="@+id/quantiteInput"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAcheter"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
