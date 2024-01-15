@@ -9,10 +9,11 @@ import android.os.AsyncTask;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.myapplication.Lib.LibSocket;
-import com.example.myapplication.Lib.MyApplication;
-import java.net.Socket;
+import android.widget.Toast;
 
+import com.example.myapplication.Reseaux.LibSocket;
+import com.example.myapplication.Reseaux.MyApplication;
+import java.net.Socket;
 
 public class MagasinActivity extends AppCompatActivity {
 
@@ -24,6 +25,8 @@ public class MagasinActivity extends AppCompatActivity {
     private ImageView imageViewArticle;
     private EditText quantiteInput;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,7 @@ public class MagasinActivity extends AppCompatActivity {
         MyApplication myApp = (MyApplication) getApplication();
         sSocket = myApp.getSocket();
 
-        // Initialisez vos vues ici
+        // Initialiser les vues
         textViewArticle = findViewById(R.id.textViewArticle);
         textViewPrix = findViewById(R.id.textViewPrix);
         textViewStock = findViewById(R.id.textViewStock);
@@ -42,6 +45,8 @@ public class MagasinActivity extends AppCompatActivity {
 
         new ConsultTask().execute(currentIdArticle);
     }
+
+
 
     public void consulterSuivant(View view) {
         if (currentIdArticle < 20) {
@@ -52,6 +57,8 @@ public class MagasinActivity extends AppCompatActivity {
         new ConsultTask().execute(currentIdArticle);
     }
 
+
+
     public void consulterPrecedent(View view) {
         if (currentIdArticle > 0) {
             currentIdArticle--;
@@ -61,9 +68,13 @@ public class MagasinActivity extends AppCompatActivity {
         new ConsultTask().execute(currentIdArticle);
     }
 
+
+
     public void acheter(View view) {
         new AcheterTask().execute(String.valueOf(currentIdArticle), quantiteInput.getText().toString());
     }
+
+
 
     public void effectuerAchat(View v){
         Intent i = new Intent(this, PanierActivity.class);
@@ -71,6 +82,8 @@ public class MagasinActivity extends AppCompatActivity {
         myApp.setSocket(sSocket);
         startActivity(i);
     }
+
+
 
     private class ConsultTask extends AsyncTask<Integer, Void, String> {
 
@@ -85,7 +98,7 @@ public class MagasinActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             String[] mots = response.split("#");
             if (mots[0].equals("CONSULT") && !mots[1].equals("ko")) {
-                // Mettez à jour vos vues avec les détails de l'article
+                // Mettre à jour les vues avec les détails de l'article
                 textViewArticle.setText(mots[2]);
                 textViewPrix.setText(mots[3]);
                 textViewStock.setText(mots[4]);
@@ -96,9 +109,12 @@ public class MagasinActivity extends AppCompatActivity {
 
             } else {
                 // Gérer l'erreur de consultation
+                Toast.makeText(MagasinActivity.this, "Erreur de consultation", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+
 
     private class AcheterTask extends AsyncTask<String, Void, String> {
 
@@ -114,9 +130,10 @@ public class MagasinActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             String[] mots = response.split("#");
             if (mots[0].equals("ACHAT") && mots[1].equals("ok")) {
-                // Mettez à jour vos vues ou effectuez d'autres actions après un achat réussi
+                Toast.makeText(MagasinActivity.this, "Achat réussi", Toast.LENGTH_SHORT).show();
             } else {
                 // Gérer l'erreur d'achat
+                Toast.makeText(MagasinActivity.this, "Erreur d'achat", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -6,18 +6,22 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.myapplication.Lib.LibSocket;
-import com.example.myapplication.Lib.MyApplication;
+import com.example.myapplication.Reseaux.LibSocket;
+import com.example.myapplication.Reseaux.MyApplication;
 import java.net.Socket;
 
 public class PanierActivity extends AppCompatActivity {
 
     private Socket sSocket;
     int idArticleAsupprimer;
+    private EditText IdArticleSupprimerInput;
+    private TextView textViewTotal;
 
 
 
@@ -30,6 +34,9 @@ public class PanierActivity extends AppCompatActivity {
         MyApplication myApp = (MyApplication) getApplication();
         sSocket = myApp.getSocket();
 
+        IdArticleSupprimerInput = findViewById(R.id.IdArticleSupprimerInput);
+        textViewTotal = findViewById(R.id.textViewTotal);
+
         idArticleAsupprimer = -1;
 
         viderTablePanier();
@@ -39,33 +46,7 @@ public class PanierActivity extends AppCompatActivity {
 
 
     public void supprimerArticle(View v){
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
-
-        for (int i = 0; i < tableLayout.getChildCount(); i++) {
-            final TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-
-            // Vérifiez si la ligne a au moins une vue enfant
-            if (tableRow.getChildCount() > 0) {
-                View firstChild = tableRow.getChildAt(0);
-
-                // Vérifiez si la première vue est un TextView
-                if (firstChild instanceof TextView) {
-                    final String idValue = ((TextView) firstChild).getText().toString();
-                    idArticleAsupprimer = Integer.parseInt(idValue);
-                    System.out.println("ID de la ligne cliquée 2 : " + idArticleAsupprimer);
-
-                    tableRow.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // La ligne a été cliquée, et vous avez récupéré la valeur de la première colonne (id)
-                            System.out.println("ID de la ligne cliquée : " + idArticleAsupprimer);
-                            // Faites quelque chose avec la valeur de l'ID
-                            // Par exemple, utilisez cette valeur pour effectuer une action spécifique.
-                        }
-                    });
-                }
-            }
-        }
+        idArticleAsupprimer = Integer.parseInt(IdArticleSupprimerInput.getText().toString());
 
         new SupprimerArticleTask().execute();
     }
@@ -113,10 +94,9 @@ public class PanierActivity extends AppCompatActivity {
             String[] mots = reponse.split("#");
 
             if (mots[1].equals("ok")) {
-                //peut etre mettre un toast
+                Toast.makeText(PanierActivity.this, "Deconnexion réussi", Toast.LENGTH_SHORT).show();
             } else {
-                // Gérer les erreurs en affichant un message d'erreur, si nécessaire
-                //mainWindow.dialogueErreur(mots[0], "Error");
+                Toast.makeText(PanierActivity.this, "Erreur de deconnexion", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -140,11 +120,11 @@ public class PanierActivity extends AppCompatActivity {
             String[] mots = reponse.split("#");
 
             if (mots[1].equals("ok")) {
+                Toast.makeText(PanierActivity.this, "Suppression réussi", Toast.LENGTH_SHORT).show();
                 viderTablePanier();
                 new ActualiserPanierTask().execute();
             } else {
-                // Gérer les erreurs en affichant un message d'erreur, si nécessaire
-                //mainWindow.dialogueErreur(mots[0], "Error");
+                Toast.makeText(PanierActivity.this, "Erreur de supprimer", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -168,12 +148,10 @@ public class PanierActivity extends AppCompatActivity {
             String[] mots = reponse.split("#");
 
             if (mots[1].equals("ok")) {
+                Toast.makeText(PanierActivity.this, "Vidage du panier réussi", Toast.LENGTH_SHORT).show();
                 viderTablePanier();
-                //new ActualiserPanierTask().execute();
-                //mainWindow.setTotal(0);
             } else {
-                // Gérer les erreurs en affichant un message d'erreur, si nécessaire
-                //mainWindow.dialogueErreur(mots[0], "Error");
+                Toast.makeText(PanierActivity.this, "Erreur du vidage du panier", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -197,18 +175,18 @@ public class PanierActivity extends AppCompatActivity {
             String[] mots = reponse.split("#");
 
             if (mots[1].equals("ok")) {
+                Toast.makeText(PanierActivity.this, "Confirmation de l'achat réussi", Toast.LENGTH_SHORT).show();
                 viderTablePanier();
                 new ActualiserPanierTask().execute();
             } else {
-                // Gérer les erreurs en affichant un message d'erreur, si nécessaire
-                // Utilisez mots[0] pour obtenir le type d'erreur, et mots[2] pour le message d'erreur
-                //mainWindow.dialogueErreur(mots[0], mots[2]);
+                Toast.makeText(PanierActivity.this, "Erreur confirmation achat", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
 
 
+    // AsyncTask pour actualiser le panier
     private class ActualiserPanierTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... voids) {
@@ -262,18 +240,19 @@ public class PanierActivity extends AppCompatActivity {
                             }
                         }
 
-                        // Met à jour le total sur le thread principal
-                        /*runOnUiThread(new Runnable() {
+                        // Mettre à jour le total sur le thread principal
+                        float finalTotal = total;
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                panierActivity.setTotal(total);
+                                textViewTotal.setText(String.format("%.2f", finalTotal));
                             }
-                        });*/
+                        });
                     }
                 }
             } else {
                 // Gère le cas où la réponse du serveur est incorrecte.
-                System.out.println("La réponse du serveur est incorrecte.");
+                System.out.println("La réponse du serveur est incorrecte");
             }
         }
     }
@@ -317,6 +296,7 @@ public class PanierActivity extends AppCompatActivity {
     private void viderTablePanier() {
         TableLayout tableLayout = findViewById(R.id.tableLayout);
         tableLayout.removeAllViews();
+        textViewTotal.setText(Float.toString(0F));
     }
 
 }

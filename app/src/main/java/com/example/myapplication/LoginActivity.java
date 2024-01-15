@@ -8,17 +8,20 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.myapplication.Lib.LibSocket;
-import com.example.myapplication.Lib.MyApplication;
+import com.example.myapplication.Reseaux.LibSocket;
+import com.example.myapplication.Reseaux.MyApplication;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.net.Socket;
-
 
 public class LoginActivity extends AppCompatActivity {
 
     private Socket sSocket;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +29,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+
+
     public void login(View v) {
         new ConnectToServerTask().execute();
     }
+
+
 
     private class ConnectToServerTask extends AsyncTask<Void, Void, String> {
 
@@ -59,16 +66,20 @@ public class LoginActivity extends AppCompatActivity {
             if (mots[0].equals("LOGIN")) {
                 if (mots[1].equals("ok")) {
                     // Passer la socket à l'activité suivante
+                    Toast.makeText(LoginActivity.this, "Login réussi", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginActivity.this, MagasinActivity.class);
                     MyApplication myApp = (MyApplication) getApplication();
                     myApp.setSocket(sSocket);
                     startActivity(i);
                 } else if (mots[1].equals("ko")) {
                     // Gérer l'échec de la connexion
+                    Toast.makeText(LoginActivity.this, mots[2], Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
+
+
 
     public int isNouveauClientChecked() {
         Switch switchNewClient = findViewById(R.id.switchNewClient);

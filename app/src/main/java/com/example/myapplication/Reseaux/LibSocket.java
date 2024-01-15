@@ -1,4 +1,4 @@
-package com.example.myapplication.Lib;
+package com.example.myapplication.Reseaux;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,6 +18,8 @@ public class LibSocket {
         }
 
     }
+
+
 
     public static String receive(Socket sSocket)
     {
